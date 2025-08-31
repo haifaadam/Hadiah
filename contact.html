@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <link rel="stylesheet" href="effectbunga.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Me</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* Fade-in on load */
+    body { opacity: 0; transition: opacity 0.5s ease-in-out; }
+    body.loaded { opacity: 1; }
+
+    /* Page Transition Overlay */
+    .page-transition {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff4da6, #ff80bf);
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5em;
+    }
+    .page-transition.active { opacity: 1; visibility: visible; }
+
+    /* Tombol Hamburger */
+    .hamburger {
+      font-size: 28px;
+      cursor: pointer;
+      position: fixed;
+      top: 15px;
+      left: 20px;
+      z-index: 1001;
+      background: #ff4da6;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #ff4da6;
+      overflow-x: hidden;
+      transition: 0.3s;
+      padding-top: 60px;
+      z-index: 1000;
+    }
+    .sidebar a {
+      display: block;
+      padding: 15px 25px;
+      text-decoration: none;
+      font-size: 18px;
+      color: white;
+      transition: 0.3s;
+    }
+    .sidebar a:hover { background-color: rgba(255, 255, 255, 0.2); }
+
+    /* Ikon Musik */
+    #musicToggle {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 999;
+      transition: transform 0.3s ease;
+      user-select: none;
+    }
+    #musicToggle.playing { animation: spin 2s linear infinite; color: #ff4d79; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+
+<body>
+  <!-- Tombol Hamburger -->
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+  <!-- Page Transition Overlay -->
+  <div id="pageTransition" class="page-transition">
+    <div>Loading...</div>
+  </div>
+
+  <!-- Sidebar Menu -->
+  <div id="sidebar" class="sidebar">
+    <a href="home.html">Beranda</a>
+    <a href="about.html">Tentang Penulis</a>
+    <a href="contact.html">Kontak Penulis</a>
+    <a href="#" onclick="navigateWithTransition('webkia.html'); return false;">Ucapan Ulang Tahun</a>
+    <a href="#" onclick="toggleDarkMode()" id="darkToggle">🌙 Dark Mode</a>
+  </div>
+
+  <div class="container">
+    <h2>Kontak Penulis</h2>
+    <p>Kalo kamu butuh apa-apa, bisa hubungi aku lewat sini yaaaa!</p>
+    <ul>
+      <li>Email : haifamohammadadam@gmail.com</li>
+      <li>WhatsApp : +62 812 1405 4509</li>
+      <li>Instagram : @haifaadam_</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>&copy; From Adam to Zhaskia❤️</p>
+  </footer>
+
+  <!-- Ikon Musik -->
+  <div id="musicToggle">🎵</div>
+
+  <script>
+    // Sidebar toggle
+    function toggleMenu() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.style.width = (sidebar.style.width === "200px") ? "0" : "200px";
+    }
+
+    // Dark Mode toggle
+    function toggleDarkMode() {
+      const btn = document.getElementById("darkToggle");
+      if (document.body.classList.contains("dark-mode")) {
+        document.body.classList.remove("dark-mode");
+        localStorage.setItem("darkMode", "disabled");
+        if (btn) btn.innerText = "🌙 Dark Mode";
+      } else {
+        document.body.classList.add("dark-mode");
+        localStorage.setItem("darkMode", "enabled");
+        if (btn) btn.innerText = "☀️ Light Mode";
+      }
+    }
+
+    // Page transition navigation
+    function navigateWithTransition(url) {
+      const overlay = document.getElementById("pageTransition");
+      if (overlay) {
+        overlay.classList.add("active");
+        setTimeout(() => { window.location.href = url; }, 400);
+      } else {
+        window.location.href = url;
+      }
+    }
+
+    // On load: restore dark mode + fade-in, and safely call initSlider if exists
+    window.addEventListener('DOMContentLoaded', () => {
+      const darkMode = localStorage.getItem("darkMode");
+      const darkToggle = document.getElementById("darkToggle");
+      if (darkMode === "enabled") {
+        document.body.classList.add("dark-mode");
+        if (darkToggle) darkToggle.innerText = "☀️ Light Mode";
+      }
+
+      setTimeout(() => {
+        document.body.classList.add('loaded');
+      }, 100);
+
+      if (typeof initSlider === 'function') {
+        try { initSlider(); } catch (e) { console.warn('initSlider error:', e); }
+      }
+    });
+  </script>
+
+  <!-- Music manager (pastikan file ini ada) -->
+  <script src="music-manager.js"></script>
+
+<script src="effectbunga.js"></script>
+
+</body>
+</html>
